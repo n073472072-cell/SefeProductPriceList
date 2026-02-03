@@ -23,8 +23,9 @@ app.get('*', (req, res) => {
 });
 
 // 使用環境變數中的 PORT 或預設 3000
+// 在雲端環境中必須監聽 0.0.0.0 才能接收外部連線
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 伺服器已啟動：端口 ${PORT}`);
+    console.log(`🚀 伺服器已啟動：監聽地址 0.0.0.0:${PORT}`);
     console.log(`🔗 API 代理目標：http://127.0.0.1:8000`);
 });
