@@ -1,35 +1,54 @@
-# diagnose_db.py
-import sqlite3
+# backend/diagnose_db.py
 import os
+import sys
 
-db_path = "backend/data/app.db"
+# Ensure backend dir is in path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-def check_item(code):
-    if not os.path.exists(db_path):
-        print(f"Database not found at {db_path}")
-        return
+try:
+    from app.database import SessionLocal, engine
+    from app.models.user import User
+    from sqlalchemy import text
+    print("✅ Successfully imported database modules")
+except Exception as e:
+    print(f"❌ Failed to import modules: {e}")
+    sys.exit(1)
+
+def diagnose():
+    print(f"Current Working Directory: {os.getcwd()}")
+    print(f"Database URL: {os.getenv('DATABASE_URL')}")
     
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    
+    # Check if DB directory exists
+    db_dir = "/app/backend/data"
+    if os.path.exists(db_dir):
+        print(f"✅ DB directory exists: {db_dir}")
+        print(f"Permissions: {oct(os.stat(db_dir).st_mode)[-3:]}")
+    else:
+        print(f"❌ DB directory NOT found: {db_dir}")
+
+    # Try to connect to engine
     try:
-        cursor.execute("SELECT * FROM products WHERE product_code = ?", (code,))
-        rows = cursor.fetchall()
-        
-        if not rows:
-            print(f"No item found with product_code: {code}")
-            return
-            
-        print(f"Results for {code}:")
-        for row in rows:
-            print(dict(row))
+        with engine.connect() as conn:
+            result = conn.execute(text("SELECT 1"))
+            print(f"✅ Basic SQL execution successful: {result.fetchone()}")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"❌ Database connection failed: {e}")
+        return
+
+    # Try to query users
+    db = SessionLocal()
+    try:
+        user_count = db.query(User).count()
+        print(f"✅ User table query successful. Total users: {user_count}")
+        admin = db.query(User).filter(User.username == "admin").first()
+        if admin:
+            print(f"✅ Admin user found: {admin.username}")
+        else:
+            print("❌ Admin user NOT found")
+    except Exception as e:
+        print(f"❌ User table query failed: {e}")
     finally:
-        conn.close()
+        db.close()
 
 if __name__ == "__main__":
-    import sys
-    code = sys.argv[1] if len(sys.argv) > 1 else "1202-5"
-    check_item(code)
+    diagnose()

@@ -13,12 +13,12 @@ export DATABASE_URL="sqlite:////app/backend/data/app.db"
 export PYTHONIOENCODING=utf-8
 export PYTHONUNBUFFERED=1
 
-# 3. 初始化資料庫
-echo "📦 檢查數據庫狀態..."
+# 3. 初始化與診斷
 cd /app/backend
-# 打印當前環境變數以供日誌檢查 (隱藏密鑰)
-echo "DB路徑: $DATABASE_URL"
+echo "📦 正在檢查數據庫狀態..."
 python3 init_db.py
+echo "🔍 執行系統診斷..."
+python3 diagnose_db.py || echo "❌ 診斷過程發生錯誤"
 
 # 4. 啟動後端 FastAPI (監聽所有位址)
 echo "⚙️  啟動後端程序..."
