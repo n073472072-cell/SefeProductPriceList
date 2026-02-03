@@ -6,7 +6,7 @@ echo "=========================================="
 # 安裝後端依賴 (如果需要)
 if [ -f "backend/requirements.txt" ]; then
     echo "📦 檢查/安裝後端依賴..."
-    pip3 install -r backend/requirements.txt
+    pip3 install -r backend/requirements.txt --break-system-packages
 fi
 
 # 啟動後端 (背景執行)
