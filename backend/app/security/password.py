@@ -1,6 +1,7 @@
 # backend/app/security/password.py
 from passlib.context import CryptContext
 
+# 強制指定使用 bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password, hashed_password):
