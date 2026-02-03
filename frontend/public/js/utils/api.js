@@ -1,5 +1,7 @@
-// frontend/public/js/utils/api.js
-const API_BASE = 'http://localhost:8000';
+// 在開發環境使用 localhost:8000，在正式環境(同一端口)使用相對路徑
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8000'
+    : '';
 
 const api = {
     async request(endpoint, options = {}) {
