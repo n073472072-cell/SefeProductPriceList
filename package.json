@@ -3,8 +3,11 @@
     "version": "1.0.0",
     "description": "協飛產品詢價系統",
     "scripts": {
-        "start": "start_all.bat"
+        "start": "node -e \"const os = require('os'); const { spawn } = require('child_process'); const cmd = os.platform() === 'win32' ? 'start_all.bat' : 'bash start.sh'; spawn(cmd, [], { stdio: 'inherit', shell: true });\""
     },
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^9.2.1"
+    }
 }
