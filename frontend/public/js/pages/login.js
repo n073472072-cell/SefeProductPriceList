@@ -21,7 +21,11 @@ loginForm.addEventListener('submit', async (e) => {
         body.append('password', formData.get('password'));
         body.append('remember_me', loginForm.remember_me.checked);
 
-        const response = await fetch('http://localhost:8000/api/auth/token', {
+        const API_SERVER = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8000'
+            : '';
+
+        const response = await fetch(`${API_SERVER}/api/auth/token`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: body,

@@ -7,8 +7,11 @@ echo "=========================================="
 mkdir -p backend/data
 
 # 啟動後端
-echo "📦 啟動後端服務 (FastAPI on 8000)..."
+echo "📦 初始化資料庫與管理員帳號..."
 cd backend
+python3 init_db.py
+
+echo "📦 啟動後端服務 (FastAPI on 8000)..."
 python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > /app/backend_output.log 2>&1 &
 BACKEND_PID=$!
 
