@@ -7,10 +7,13 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 2. API 代理設定
-// 我們將請求直接轉發，不進行 pathRewrite，因為 FastAPI 內部路由已包含 /api
+// 注意：FastAPI 內部路由是以 /api 開頭，所以代理目標需對齊
 app.use('/api', createProxyMiddleware({
-    target: 'http://127.0.0.1:8000',
+    target: 'http://127.0.0.1:8000/api',
     changeOrigin: true,
+    pathRewrite: {
+        '^/api': '', // 移除進來的 /api 前綴，避免變成 /api/api
+    },
     ws: true, // 支援 websocket (如果以後需要)
     onProxyReq: (proxyReq, req, res) => {
         // console.log(`[Proxy Request]: ${req.method} ${req.url}`);
