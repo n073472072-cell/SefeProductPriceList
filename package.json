@@ -1,0 +1,10 @@
+{
+    "name": "xiefei-price-system",
+    "version": "1.0.0",
+    "description": "協飛產品詢價系統",
+    "scripts": {
+        "start": "start_all.bat"
+    },
+    "author": "",
+    "license": "ISC"
+}

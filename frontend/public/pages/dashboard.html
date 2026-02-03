@@ -1,0 +1,68 @@
+<!-- frontend/public/pages/dashboard.html -->
+<div>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">
+            <img src="assets/sefelogo.png" alt="Logo" style="height: 32px; width: auto;">
+            <span>協飛產品詢價系統</span>
+        </div>
+        <div class="top-nav-user">
+            <!-- 未來可在此顯示 Username -->
+            <button onclick="auth.logout(); window.location.hash='#/login';" class="btn btn-secondary"
+                style="padding: 6px 12px; font-size: 13px;">
+                登出
+            </button>
+        </div>
+    </nav>
+
+    <div class="container-fluid" style="max-width: 1000px; margin: 0 auto;">
+        <div style="margin-bottom: 24px;">
+            <h2 style="font-size: 24px; margin-bottom: 8px;">首頁</h2>
+            <p style="color: var(--text-secondary); margin: 0;">歡迎回來！請選擇您要進行的操作。</p>
+        </div>
+
+        <div class="card-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:24px;">
+            <!-- Customer Price Card -->
+            <div class="card" onclick="window.location.hash='#/customer-price'"
+                style="cursor:pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 160px; border-left: 4px solid var(--primary-blue);">
+                <span style="font-size: 40px; margin-bottom: 16px;">🏢</span>
+                <h3 style="margin: 0; font-size: 18px;">產品客戶售價(未稅)</h3>
+                <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--text-secondary);">查詢一般客戶的產品售價列表</p>
+            </div>
+
+            <!-- Distributor Price Card -->
+            <div class="card" onclick="window.location.hash='#/distributor-price'"
+                style="cursor:pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 160px; border-left: 4px solid var(--active-blue);">
+                <span style="font-size: 40px; margin-bottom: 16px;">🏭</span>
+                <h3 style="margin: 0; font-size: 18px;">產品經銷售價</h3>
+                <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--text-secondary);">查詢經銷商的進價與規格</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 最新消息 Modal (使用新的 modal class) -->
+<div id="news-modal" class="modal-overlay">
+    <div class="modal-content" style="padding: 0;">
+        <!-- Fixed Header -->
+        <div style="padding: 25px 30px 15px 30px; border-bottom: 1px solid #eee;">
+            <h2 id="modal-title" style="margin: 0; font-size: 20px;"></h2>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div id="modal-content"
+            style="flex: 1; overflow-y: auto; padding: 20px 30px; line-height: 1.6; color: var(--text-main); font-size: 15px;">
+        </div>
+
+        <!-- Fixed Footer -->
+        <div
+            style="padding: 15px 30px 25px 30px; border-top: 1px solid #eee; display:flex; justify-content:space-between; align-items:center; background: #fff; border-radius: 0 0 var(--radius-md) var(--radius-md);">
+            <label
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-secondary); font-size: 14px;">
+                <input type="checkbox" id="hide-news-check" style="width: 17px; height: 17px; cursor: pointer;">
+                <span>今天不再顯示</span>
+            </label>
+            <button id="close-modal" class="btn btn-primary" style="padding: 8px 24px;">確認</button>
+        </div>
+    </div>
+</div>

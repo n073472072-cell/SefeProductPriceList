@@ -1,0 +1,100 @@
+<!-- frontend/public/pages/users.html -->
+<div class="users-management">
+    <h2>使用者帳號管理</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <button id="add-user-btn"
+            style="background-color: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            + 新增使用者
+        </button>
+        <button type="button" onclick="window.location.hash='#/dashboard'" class="btn btn-secondary"
+            style="display: flex; align-items: center; gap: 8px; padding: 10px 20px;">
+            <span>🏠</span> 返回首頁
+        </button>
+    </div>
+
+    <table id="users-table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f1f5f9; text-align: left;">
+                <th style="padding: 10px; border-bottom: 1px solid #ddd;">ID</th>
+                <th style="padding: 10px; border-bottom: 1px solid #ddd;">帳號 (Username)</th>
+                <th style="padding: 10px; border-bottom: 1px solid #ddd;">使用者名稱</th>
+                <th style="padding: 10px; border-bottom: 1px solid #ddd;">權限 (Role)</th>
+                <th style="padding: 10px; border-bottom: 1px solid #ddd;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- User rows will be inserted here -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Add User Modal -->
+<div id="add-user-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    <div style="background:white; padding:30px; border-radius:8px; width:400px;">
+        <h3>新增使用者</h3>
+        <form id="add-user-form">
+            <div style="margin-bottom: 15px;">
+                <label>帳號</label>
+                <input type="text" name="username" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>使用者名稱</label>
+                <input type="text" name="full_name" placeholder="例如：王小明"
+                    style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>密碼</label>
+                <input type="password" name="password" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label>權限</label>
+                <select name="role" style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <option value="user">一般使用者 (User)</option>
+                    <option value="admin">管理員 (Admin)</option>
+                </select>
+            </div>
+            <div style="text-align: right;">
+                <button type="button" id="cancel-add-user" style="margin-right: 10px;">取消</button>
+                <button type="submit"
+                    style="background-color: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 4px;">建立</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div id="edit-user-modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    <div style="background:white; padding:30px; border-radius:8px; width:400px;">
+        <h3>編輯使用者</h3>
+        <form id="edit-user-form">
+            <input type="hidden" name="id">
+            <div style="margin-bottom: 15px;">
+                <label>帳號 (Username)</label>
+                <input type="text" name="username" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>使用者名稱</label>
+                <input type="text" name="full_name" style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>新密碼 (不修改請留空)</label>
+                <input type="password" name="password" placeholder="若不修改密碼請留空"
+                    style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label>權限 (Role)</label>
+                <select name="role" style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <option value="user">一般使用者 (User)</option>
+                    <option value="admin">管理員 (Admin)</option>
+                </select>
+            </div>
+            <div style="text-align: right;">
+                <button type="button" id="cancel-edit-user" style="margin-right: 10px;">取消</button>
+                <button type="submit"
+                    style="background-color: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 4px;">更新</button>
+            </div>
+        </form>
+    </div>
+</div>

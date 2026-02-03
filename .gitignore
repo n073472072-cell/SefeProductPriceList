@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+.env
+data/*.db
+backend_log.txt
+out.txt
+test_write.txt
+node_modules/

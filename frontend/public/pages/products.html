@@ -1,0 +1,250 @@
+<!-- frontend/public/pages/products.html -->
+<div class="products-container">
+    <div style="margin-bottom: 20px;">
+        <h2 id="page-title" style="margin: 0 0 15px 0;">產品價格查詢</h2>
+
+        <!-- Toolbar: Search (Left) + Actions (Right) -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
+            <!-- Left: Search & Filter -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="text" id="search-input" placeholder="搜尋產品代號或名稱..." autocomplete="off"
+                        style="padding: 10px 40px 10px 10px; width: 250px; border: 1px solid #ccc; border-radius: 4px;">
+                    <span id="search-icon"
+                        style="position: absolute; right: 10px; cursor: pointer; color: #666; font-size: 1.2rem;">🔍</span>
+                </div>
+
+                <select id="category-filter"
+                    style="padding: 10px; width: 180px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;">
+                    <option value="">所有分類</option>
+                </select>
+
+                <button id="reset-filter-btn"
+                    style="background: white; border: 1px solid #ccc; padding: 10px 15px; border-radius: 4px; cursor: pointer; color: #666;">
+                    🔄 清除搜尋
+                </button>
+
+                <span id="result-count" style="font-size: 14px; color: #666; margin-left: 5px;"></span>
+            </div>
+
+            <!-- Right: Buttons -->
+            <div style="display:flex; align-items: center; gap: 10px;">
+                <!-- Template Download Button (Visible to everyone) -->
+                <button id="download-template-btn"
+                    style="background-color: #0d9488; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer;">
+                    📥 下載範本
+                </button>
+
+                <!-- Admin Actions Group -->
+                <div id="admin-actions" style="display:none;">
+                    <button id="add-product-btn"
+                        style="background-color: #4f46e5; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                        ➕ 新增產品
+                    </button>
+                    <button id="import-btn"
+                        style="background-color: #059669; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                        📥 匯入
+                    </button>
+                    <button id="export-btn"
+                        style="background-color: #2563eb; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                        📤 匯出
+                    </button>
+                    <button id="clear-btn"
+                        style="background-color: #dc2626; color: white; padding: 10px 16px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                        🗑️ 清除
+                    </button>
+                </div>
+
+                <!-- Back Button -->
+                <button type="button" onclick="window.location.hash='#/dashboard'" class="btn btn-secondary"
+                    style="display: flex; align-items: center; gap: 8px; padding: 10px 20px;">
+                    <span>🏠</span> 返回首頁
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 強制覆蓋全域樣式，確保固定效果 */
+        #product-table {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            width: 100% !important;
+            overflow: visible !important;
+        }
+
+        #product-table th {
+            position: sticky !important;
+            top: 0 !important;
+            background-color: var(--primary-blue) !important;
+            color: white !important;
+            z-index: 100 !important;
+            padding: 12px 16px !important;
+            text-align: left !important;
+            font-weight: 600 !important;
+            border-bottom: 2px solid #ddd !important;
+            white-space: nowrap;
+        }
+
+        /* 捲動容器：這是 sticky 作用的關鍵 */
+        .table-wrapper {
+            position: relative !important;
+            overflow: auto !important;
+            max-height: 70vh !important;
+            border: 1px solid #ddd !important;
+            border-radius: 4px !important;
+            background: white !important;
+        }
+
+        /* 避免父層級干擾 */
+        .products-container {
+            overflow: visible !important;
+        }
+
+        /* 備註欄位：基礎樣式 */
+        .notes-cell {
+            position: relative;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: help;
+            color: var(--primary-blue);
+            transition: all 0.2s;
+        }
+
+        /* 視窗縮小時縮短 */
+        @media (max-width: 1200px) {
+            .notes-cell {
+                max-width: 100px;
+            }
+        }
+
+        /* 自定義懸浮窗外觀 */
+        .custom-tooltip {
+            position: fixed;
+            display: none;
+            background: #2d3748;
+            /* 深色沉穩背景 */
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 350px;
+            z-index: 9999;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+            /* 防止遮擋滑鼠 */
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            /* 支援換行顯示 */
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <!-- 懸浮窗容器 -->
+    <div id="custom-tooltip" class="custom-tooltip"></div>
+
+    <div class="table-wrapper">
+        <table id="product-table">
+            <thead>
+                <tr>
+                    <th>商品編號</th>
+                    <th>產品名稱</th>
+                    <th>商品分類</th>
+                    <th>規格</th>
+                    <th id="price-header">價格</th>
+                    <th>售價規格</th>
+                    <th>更新日期</th>
+                    <th>狀態</th>
+                    <th>備註</th>
+                    <th id="action-header" style="display:none;">管理</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 資料載入中... -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Product Form Modal -->
+    <div id="product-modal" class="modal"
+        style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+        <div
+            style="background: white; width: 500px; margin: 50px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h3 id="modal-title">新增產品</h3>
+            <form id="product-form">
+                <input type="hidden" id="p-id">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div>
+                        <label>商品編號</label>
+                        <input type="text" id="p-code" required
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label>產品名稱</label>
+                        <input type="text" id="p-name" required
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label>商品分類</label>
+                        <input type="text" id="p-category"
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label>規格</label>
+                        <input type="text" id="p-specification"
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label id="p-price-label">售價 (未稅)</label>
+                        <input type="text" id="p-price" required
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label>售價規格</label>
+                        <input type="text" id="p-price-spec"
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label>更新日期</label>
+                        <input type="text" id="p-updated" disabled
+                            style="width:100%; padding:8px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px;">
+                    </div>
+                    <div>
+                        <label>狀態</label>
+                        <select id="p-status"
+                            style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px;">
+                            <option value="active">上架</option>
+                            <option value="inactive">下架</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label>備註</label>
+                    <textarea id="p-notes"
+                        style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; height:80px;"></textarea>
+                </div>
+                <div style="display:flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button type="button" onclick="document.getElementById('product-modal').style.display='none'"
+                        style="padding: 8px 20px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer;">取消</button>
+                    <button type="submit"
+                        style="padding: 8px 20px; border: none; background: #4f46e5; color: white; border-radius: 4px; cursor: pointer;">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

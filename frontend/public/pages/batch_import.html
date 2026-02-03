@@ -1,0 +1,20 @@
+<!-- frontend/public/pages/batch_import.html -->
+<div class="batch-import">
+    <h2>產品批次匯入</h2>
+    <p>請將產品 Excel 檔案 (.xlsx 或 .xls) 拖放到下方區域，或點擊選擇檔案。</p>
+
+    <div id="drop-zone"
+        style="border: 3px dashed #cbd5e1; border-radius: 12px; padding: 50px; text-align: center; background: #f8fafc; cursor: pointer;">
+        <p>拖放檔案至此處</p>
+        <input type="file" id="file-input" accept=".xlsx, .xls" style="display:none;">
+    </div>
+
+    <div id="upload-status" style="margin-top: 20px;"></div>
+
+    <div style="margin-top: 30px;">
+        <button type="button" onclick="window.location.hash='#/dashboard'" class="btn btn-secondary"
+            style="display: flex; align-items: center; gap: 8px; padding: 10px 20px;">
+            <span>🏠</span> 返回首頁
+        </button>
+    </div>
+</div>

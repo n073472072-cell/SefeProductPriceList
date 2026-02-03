@@ -1,0 +1,334 @@
+/* frontend/public/css/style.css */
+/* 
+   Xiefei Enterprise Design System 
+   Color Palette: Red, Blue, White
+   Style: Commercial Professional
+*/
+
+:root {
+    /* Corporate Colors */
+    --primary-blue: #003366;
+    /* 深藍：主色調 (Navy) */
+    --hover-blue: #004080;
+    /* 懸停藍 */
+    --active-blue: #0059b3;
+    /* 亮藍：連結/按鈕 */
+
+    --accent-red: #cc0000;
+    /* 企業紅：強調與警告 */
+    --hover-red: #b30000;
+
+    --bg-light: #f4f6f9;
+    /* 淺灰藍背景：降低視覺疲勞 */
+    --bg-white: #ffffff;
+
+    --text-main: #333333;
+    /* 主要文字 */
+    --text-secondary: #666666;
+    /* 次要文字 */
+    --border-color: #dce0e4;
+    /* 邊框色 */
+
+    --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 4px;
+    --radius-md: 6px;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* --- Layout --- */
+#app {
+    width: 100%;
+    min-height: 100vh;
+}
+
+.container-fluid {
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--primary-blue);
+    margin-top: 0;
+    font-weight: 600;
+}
+
+/* --- Buttons --- */
+button,
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    line-height: 1.5;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-blue);
+    box-shadow: 0 2px 4px rgba(0, 51, 102, 0.2);
+}
+
+.btn-secondary {
+    background-color: white;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+}
+
+.btn-secondary:hover {
+    background-color: #f0f7ff;
+}
+
+.btn-danger {
+    background-color: white;
+    color: var(--accent-red);
+    border: 1px solid var(--accent-red);
+}
+
+.btn-danger:hover {
+    background-color: #fff0f0;
+}
+
+.btn-danger-solid {
+    background-color: var(--accent-red);
+    color: white;
+}
+
+.btn-danger-solid:hover {
+    background-color: var(--hover-red);
+}
+
+/* --- Cards --- */
+.card {
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+}
+
+/* --- Forms --- */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-main);
+    background-color: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--active-blue);
+    box-shadow: 0 0 0 3px rgba(0, 89, 179, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+/* --- Tables --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    /* For rounded corners */
+    box-shadow: var(--shadow-card);
+    margin-bottom: 20px;
+}
+
+table th {
+    background-color: var(--primary-blue);
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table tr:hover td {
+    background-color: #f8fbff;
+}
+
+/* --- Login Page Specifics --- */
+.login-bg {
+    background: linear-gradient(135deg, var(--bg-light) 0%, #e6efff 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card-container {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-top: 5px solid var(--accent-red);
+    /* 企業紅頂條 */
+    width: 100%;
+    max-width: 420px;
+}
+
+/* --- Status Badges --- */
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* --- Modals --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+/* 自定義滾動條樣式，讓它更美觀 */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* --- Navbar / Header --- */
+.top-nav {
+    background-color: white;
+    border-bottom: 2px solid var(--accent-red);
+    /* 企業紅線條 */
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.top-nav-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.top-nav-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+}
