@@ -5,6 +5,7 @@ aiosqlite
 python-multipart
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt
 openpyxl
 pandas
 python-dotenv

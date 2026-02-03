@@ -1,41 +1,34 @@
 #!/bin/bash
-# 協飛產品系統 - 雲端啟動腳本 (權限與路徑強化版)
+# 協飛產品系統 - 雲端啟動腳本 (最終診斷版)
 
-echo "=========================================="
-echo "🚀 啟動協飛全端環境 (Zeabur)"
-echo "=========================================="
+# 顯示所有執行的指令與日誌
+# set -x
 
-# 確保在根目錄
-cd /app
+echo "--- 系統啟動中 ---"
+date
+whoami
+pwd
 
-# 1. 強制建立資料夾並賦予最高讀寫權限
-echo "📂 處理資料庫目錄..."
+# 1. 資料夾與權限
+echo "📂 檢查資料夾權限..."
 mkdir -p /app/backend/data
 chmod 777 /app/backend/data || true
-# 如果已有資料庫，也確保權限正確
-if [ -f "/app/backend/data/app.db" ]; then
-    chmod 666 /app/backend/data/app.db || true
-fi
 
-# 2. 清理可能干擾的舊設定 (雲端環境不依賴 .env 檔案路徑)
-if [ -f "backend/.env" ]; then
-    echo "🧹 移除舊的 .env 設定檔以避免路徑衝突..."
-    rm backend/.env
-fi
-
-# 3. 初始化資料庫
-echo "📦 初始化資料庫與管理員帳號..."
+# 2. 初始化資料庫
+echo "📦 正在初始化資料庫..."
 cd /app/backend
-# 再次明確注入絕對路徑環境變數
 export DATABASE_URL="sqlite:////app/backend/data/app.db"
-python3 init_db.py
+# 使用 python3 直接執行，並將錯誤輸出到標準輸出
+python3 init_db.py 2>&1
 
-# 4. 啟動後端 (使用 bg 運行)
-echo "⚙️  啟動後端 FastAPI (Port: 8000)..."
-python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000 &
-BACKEND_PID=$!
+# 3. 啟動後端
+echo "⚙️  正在背景啟動 FastAPI (Port 8000)..."
+python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level debug &
+# 給予一點時間啟動
+sleep 5
 
-# 5. 啟動前端 (主服務，Port: 3000)
-echo "🌐 啟動前端 Express (Port: 3000)..."
+# 4. 啟動前端代理 (主程序)
+echo "🌐 正在啟動前端 Express 代理 (Port 3000)..."
 cd /app/frontend
-node server.js
+# 確保 node 執行
+exec node server.js
