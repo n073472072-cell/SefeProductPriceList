@@ -8,9 +8,16 @@ const app = express();
 app.use('/api', createProxyMiddleware({
     target: 'http://127.0.0.1:8000',
     changeOrigin: true,
+    onProxyReq: (proxyReq, req, res) => {
+        console.log(`[Proxy] ${req.method} ${req.url}`);
+    },
     onError: (err, req, res) => {
-        console.error('Proxy Error:', err);
-        res.status(502).send('後端服務啟動中或暫時無法連線，請稍後再試。');
+        console.error('[Proxy Error]:', err.message);
+        res.status(502).json({
+            error: 'Backend Unreachable',
+            message: '後端服務啟動中，請重新整理頁面。',
+            detail: err.message
+        });
     }
 }));
 
