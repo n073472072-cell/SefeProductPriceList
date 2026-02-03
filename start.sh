@@ -1,43 +1,34 @@
 #!/bin/bash
 # 協飛產品系統 - 雲端最終啟動腳本
 
-echo "--- [$(date)] 系統啟動程序開始 ---"
+echo "--- [$(date)] 伺服器初始化中 ---"
 
-# 確保在正確目錄
 cd /app
 
-# 1. 處理資料存放目錄
-echo "📂 [Step 1] 準備資料庫目錄..."
+# 1. 資料夾與權限
 mkdir -p /app/backend/data
 chmod 777 /app/backend/data || true
 
-# 2. 強制設定環境變數
+# 2. 環境變數
 export DATABASE_URL="sqlite:////app/backend/data/app.db"
 export PYTHONIOENCODING=utf-8
 
-# 3. 初始化資料庫 (確保 admin 存在)
-echo "📦 [Step 2] 正在檢查/初始化資料庫..."
+# 3. 初始化資料庫
 cd /app/backend
-# 執行初始化，如果不成功也要繼續，以免阻礙主程式啟動
-python3 init_db.py || echo "⚠️ 初始化腳本執行時遇到問題 (可能資料庫已存在)"
+echo "📦 正在檢查/初始化數據庫..."
+python3 init_db.py || echo "⚠️ 初始化略過"
 
-# 4. 啟動後端 FastAPI (改為監聽 0.0.0.0 以提高容器相容性)
-echo "⚙️  [Step 3] 啟動後端 FastAPI (Port 8000)..."
+# 4. 啟動後端 FastAPI
+echo "⚙️  正在啟動後端 FastAPI (Port 8000)..."
 python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!
 
-# 5. 返回根目錄並啟動前端
-cd /app
-echo "🌐 [Step 4] 啟動前端 Express 代理 (Port 3000)..."
+# 5. 啟動前端代理
 cd /app/frontend
+echo "🌐 正在啟動前端服務 (Port 3000)..."
 
-# 檢查一下後端進程是否還活著
-sleep 2
-if ps -p $BACKEND_PID > /dev/null; then
-   echo "✅ 後端進程 (PID: $BACKEND_PID) 運行中"
-else
-   echo "❌ 警告：後端進程似乎啟動失敗，請檢查日誌"
-fi
+# 給予後端一點啟動餘裕
+sleep 3
 
-# 執行前端主進程
+# 執行主程序
 exec node server.js
