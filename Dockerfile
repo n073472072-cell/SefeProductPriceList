@@ -19,9 +19,9 @@ COPY backend/requirements.txt ./backend/
 COPY frontend/package*.json ./frontend/
 
 # 更新 pip 並安裝依賴
-# 使用 --break-system-packages 是因為 Debian 12 核心環境保護，容器內建議直接使用
-RUN pip3 install --no-cache-dir --upgrade pip --break-system-packages && \
-    pip3 install --no-cache-dir -r backend/requirements.txt --break-system-packages
+# 使用 --break-system-packages 是因為 Debian 12 核心環境保護，容器內建議直接使用# 更新 pip 並安裝依賴
+RUN pip3 install --no-cache-dir --upgrade pip --break-system-packages --root-user-action=ignore && \
+    pip3 install --no-cache-dir -r backend/requirements.txt --break-system-packages --root-user-action=ignore
 
 # 安裝前端依賴
 RUN cd frontend && npm install
