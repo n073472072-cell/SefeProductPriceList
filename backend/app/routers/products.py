@@ -43,9 +43,9 @@ async def upload_products_excel(
         raise HTTPException(status_code=400, detail=result["message"])
     return result
 
-@router.get("/export", dependencies=[Depends(get_current_admin_user)])
+@router.get("/export", dependencies=[Depends(get_current_user)])
 def export_products_excel(mode: str = Query("all"), db: Session = Depends(get_db)):
-    """匯出所有產品為 Excel (僅限管理員)"""
+    """匯出產品資料為 Excel (支援經銷/客戶模式)"""
     excel_data = product_service.export_products_to_excel(db, mode)
     return StreamingResponse(
         iter([excel_data]),

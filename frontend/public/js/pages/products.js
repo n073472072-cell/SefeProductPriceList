@@ -85,27 +85,7 @@ async function initProducts() {
             };
         }
 
-        // 匯出功能
-        const exportBtn = document.getElementById('export-btn');
-        if (exportBtn) {
-            exportBtn.onclick = async () => {
-                const mode = isDistributor ? 'distributor' : 'customer';
-                try {
-                    const response = await api.request(`/api/products/export?mode=${mode}`, { method: 'GET' });
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    const dateStr = new Date().toISOString().slice(0, 10);
-                    a.download = isDistributor ? `經銷售價匯出_${dateStr}.xlsx` : `客戶售價匯出_${dateStr}.xlsx`;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                } catch (error) {
-                    alert('匯出失敗: ' + error.message);
-                }
-            };
-        }
+
 
         // 清除功能
         const clearBtn = document.getElementById('clear-btn');
@@ -147,24 +127,24 @@ async function initProducts() {
         };
     }
 
-    // Download Template
+    // Excel 匯出 (原為下載範本)
     const templateBtn = document.getElementById('download-template-btn');
     if (templateBtn) {
         templateBtn.onclick = async () => {
-            const type = isDistributor ? 'distributor' : 'customer';
-            const filename = isDistributor ? '經銷商產品範本.xlsx' : '客戶產品範本.xlsx';
+            const mode = isDistributor ? 'distributor' : 'customer';
             try {
-                const response = await api.request(`/api/products/template?type=${type}`, { method: 'GET' });
+                const response = await api.request(`/api/products/export?mode=${mode}`, { method: 'GET' });
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = filename;
+                const dateStr = new Date().toISOString().slice(0, 10);
+                a.download = isDistributor ? `經銷售價匯出_${dateStr}.xlsx` : `客戶售價匯出_${dateStr}.xlsx`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
             } catch (error) {
-                alert('下載範本失敗: ' + error.message);
+                alert('匯出失敗: ' + error.message);
             }
         };
     }
